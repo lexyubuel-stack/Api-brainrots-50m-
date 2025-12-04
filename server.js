@@ -15,23 +15,23 @@ app.get("/health", (_, res) => {
   res.json({ ok: true, service: "Lexy AJ Brainrot API" });
 });
 
-// Datos de prueba
-const brainrots = [
-  { name: "Golden Brainrot", price: 100000000, mps: 5500000 },
-  { name: "Ultra Brainrot", price: 80000000, mps: 4200000 },
-  { name: "Basic Brainrot", price: 50000000, mps: 2500000 }
+// Datos de prueba (puedes reemplazar con datos reales)
+const liveBrainrots = [
+  {
+    name: "Golden Brainrot",
+    jobId: "12345678-aaaa-bbbb-cccc-1234567890ab",
+    players: 12
+  },
+  {
+    name: "Ultra Brainrot",
+    jobId: "87654321-bbbb-cccc-dddd-0987654321ba",
+    players: 8
+  }
 ];
 
-// Endpoint de brainrots
-app.get("/brainrots", (_, res) => {
-  res.json(brainrots);
-});
-
-// Endpoint top brainrots
-app.get("/brainrots/top", (req, res) => {
-  const limit = parseInt(req.query.limit) || 3;
-  const sorted = [...brainrots].sort((a, b) => b.price - a.price);
-  res.json(sorted.slice(0, limit));
+// Endpoint de brainrots vivos
+app.get("/brainrots/live", (_, res) => {
+  res.json(liveBrainrots);
 });
 
 const PORT = process.env.PORT || 3000;
