@@ -15,21 +15,30 @@ app.get("/health", (_, res) => {
   res.json({ ok: true, service: "Lexy AJ Brainrot API" });
 });
 
-// Datos de prueba (puedes reemplazar con datos reales)
-const liveBrainrots = [
-  {
-    name: "Golden Brainrot",
-    jobId: "12345678-aaaa-bbbb-cccc-1234567890ab",
-    players: 12
-  },
-  {
-    name: "Ultra Brainrot",
-    jobId: "87654321-bbbb-cccc-dddd-0987654321ba",
-    players: 8
-  }
-];
+// Almacenamiento en memoria de servidores vivos
+let liveBrainrots = [];
 
-// Endpoint de brainrots vivos
+// Endpoint POST: los servidores publican su JobId y jugadores
+app.post("/brainrots/live", (req, res) => {
+  const { name, jobId, players } = req.body;
+
+  if (!jobId) {
+    return res.status(400).json({ ok: false, error: "Falta jobId" });
+  }
+
+  // Buscar si ya existe ese servidor
+  const existing = liveBrainrots.find(b => b.jobId === jobId);
+  if (existing) {
+    existing.players = players;
+    existing.name = name;
+  } else {
+    liveBrainrots.push({ name, jobId, players });
+  }
+
+  res.json({ ok: true });
+});
+
+// Endpoint GET: devuelve todos los brainrots vivos
 app.get("/brainrots/live", (_, res) => {
   res.json(liveBrainrots);
 });
